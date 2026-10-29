@@ -2,6 +2,9 @@ import json
 import os
 import time
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DEFAULT_PATH = os.path.join(BASE_DIR, "tasks.json")
+
 MSG_INVALID_NUMBER = "Please enter a valid number!"
 MSG_NO_TASKS = "You don't have any Tasks :)"
 MSG_TASK_NOT_FOUND = "Wrong: task not found"
@@ -89,15 +92,17 @@ class Controller:
         """A task must at least have a name that is real text."""
         return isinstance(task.get("name"), str) and task["name"].strip() != ""
 
-    def save(self, path="tasks.json"):
+    def save(self, path=None):
         """To save your task list"""
+        path = path or DEFAULT_PATH
         tmp = path + ".tmp"
         with open(tmp, "w", encoding="utf-8") as file:
             json.dump(self.data, file, ensure_ascii=False, indent=4)
         os.replace(tmp, path)
 
-    def load(self, path="tasks.json"):
+    def load(self, path=None):
         """To get saved data in file json"""
+        path = path or DEFAULT_PATH
         try:
             with open(path, "r", encoding="utf-8") as f:
                 self.data = json.load(f)
