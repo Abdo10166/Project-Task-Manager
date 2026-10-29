@@ -24,7 +24,7 @@ class Controller:
         """Adds new tasks from the user to the task list."""
         while True:
             self.print_tasks()
-            result = input("Enter Task or Exit :(T/e)")
+            result = input("Enter Task or Exit :(T/E)")
             if result.lower() == "e":
                 return
             elif result.lower() == "t":
@@ -36,7 +36,7 @@ class Controller:
                     date = input("Date can't be empty! Try again :").strip()
                 self.data.append({"name": name, "date": date, "ok": False})
             else:
-                print("Invalid choice, please enter T or e ")
+                print("Invalid choice, please enter T or E ")
 
     def show_tasks(self):
         """Displays your task list"""
