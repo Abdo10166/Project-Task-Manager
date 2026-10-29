@@ -24,16 +24,36 @@ class Controller:
         """Adds new tasks from the user to the task list."""
         while True:
             self.print_tasks()
-            result = input("Enter Task or Exit :(T/E)")
+            try:
+                result = input("Enter Task or Exit :(T/E)")
+            except EOFError:
+                print()
+                break
             if result.lower() == "e":
                 return
             elif result.lower() == "t":
-                name = input("Enter the Name Task :").strip()
+                try:
+                    name = input("Enter the Name Task :").strip()
+                except EOFError:
+                    print()
+                    break
                 while not name:
-                    name = input("Name can't be empty! Try again :").strip()
-                date = input("Enter the Date Task :").strip()
+                    try:
+                        name = input("Name can't be empty! Try again :").strip()
+                    except EOFError:
+                        print()
+                        break
+                try:
+                    date = input("Enter the Date Task :").strip()
+                except EOFError:
+                    print()
+                    break
                 while not date:
-                    date = input("Date can't be empty! Try again :").strip()
+                    try:
+                        date = input("Date can't be empty! Try again :").strip()
+                    except EOFError:
+                        print()
+                        break
                 self.data.append({"name": name, "date": date, "ok": False})
             else:
                 print("Invalid choice, please enter T or E ")
@@ -44,7 +64,11 @@ class Controller:
             print(MSG_NO_TASKS)
         else:
             self.print_tasks()
-            input("Enter to Exit")
+            try:
+                input("Enter to Exit")
+            except EOFError:
+                print()
+                break
 
     def mark_task(self):
         """Mark completed tasks."""
@@ -67,6 +91,10 @@ class Controller:
             except ValueError:
                 print(MSG_INVALID_NUMBER)
 
+            except EOFError:
+                print()
+                break
+
     def delete_task(self):
         """Deleting tasks from the task list."""
         if not self.data:
@@ -86,6 +114,9 @@ class Controller:
                     self.data.pop(n - 1)
             except ValueError:
                 print(MSG_INVALID_NUMBER)
+            except EOFError:
+                print()
+                break
 
     @staticmethod
     def looks_like_task(task):
@@ -135,29 +166,30 @@ class Controller:
             print(f"Warning: {len(bad)} broken item(s) moved to quarantine.")
 
 
-manager = Controller()
-manager.load()
-while True:
-    print(
-        "===== Task Manager =====\n\n1. Add task\n2. Show tasks\n3. Mark task as done\n4. Delete task \n5. Exit"
-    )
-    try:
-        num = int(input("Choose :"))
-        if num == 1:
-            manager.add_tasks()
-            manager.save()
-        elif num == 2:
-            manager.show_tasks()
-        elif num == 3:
-            manager.mark_task()
-            manager.save()
-        elif num == 4:
-            manager.delete_task()
-            manager.save()
-        elif num == 5:
-            break
-        else:
-            print("Error number not found")
-    except ValueError:
-        print(MSG_INVALID_NUMBER)
-manager.save()
+if __name__ == "__main__":
+    manager = Controller()
+    manager.load()
+    while True:
+        print(
+            "===== Task Manager =====\n\n1. Add task\n2. Show tasks\n3. Mark task as done\n4. Delete task \n5. Exit"
+        )
+        try:
+            num = int(input("Choose :"))
+            if num == 1:
+                manager.add_tasks()
+                manager.save()
+            elif num == 2:
+                manager.show_tasks()
+            elif num == 3:
+                manager.mark_task()
+                manager.save()
+            elif num == 4:
+                manager.delete_task()
+                manager.save()
+            elif num == 5:
+                break
+            else:
+                print("Error number not found")
+        except ValueError:
+            print(MSG_INVALID_NUMBER)
+    manager.save()
